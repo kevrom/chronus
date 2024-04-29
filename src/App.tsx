@@ -1,9 +1,12 @@
 import type { Component } from 'solid-js';
-
-import styles from './App.module.css';
+import { Timer } from './Timer';
 
 const App: Component = () => {
-  return <div class={styles.App}>Timer</div>;
+  return (
+    <div class="container w-96 my-12">
+      <Timer />
+    </div>
+  );
 };
 
 export default App;
