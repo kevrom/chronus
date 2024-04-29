@@ -10,10 +10,11 @@ import {
   pauseState,
   currentTimeState,
   knobState,
-  counter$,
+  createCounter$,
   belowZero$,
   arcChange$,
   dialCoords$,
+  pause$,
 } from './state';
 import { drawArc } from './utils';
 import { Canvas } from './Canvas';
@@ -31,7 +32,7 @@ export const Timer = () => {
     ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   });
 
-  const counter = counter$.subscribe();
+  const counter = createCounter$(pause$).subscribe();
   const belowZero = belowZero$.subscribe();
   const arcChange = arcChange$.subscribe((v) => drawArc(ctx, v));
   const dialCoords = dialCoords$.subscribe();

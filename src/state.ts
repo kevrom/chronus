@@ -9,6 +9,7 @@ import {
   takeUntil,
   tap,
   combineLatest,
+  Observable,
 } from 'rxjs';
 import { degreesToPoint } from './utils';
 import {
@@ -33,22 +34,24 @@ const [, setKnob] = knobState;
 
 // STATE STREAMS
 
-const pause$ = from(observable(isPaused));
-const isPaused$ = pause$.pipe(filter((v) => !!v));
-const currentTime$ = from(observable(currentTime));
-const maxTime$ = from(observable(maxTime));
-const arc$ = from(observable(arc));
+export const pause$ = from(observable(isPaused));
+export const currentTime$ = from(observable(currentTime));
+export const maxTime$ = from(observable(maxTime));
+export const arc$ = from(observable(arc));
 
 // while unpaused, keep a timer running and listening for a pause
-export const counter$ = pause$.pipe(
-  switchMap((p) => {
-    if (p) {
-      return EMPTY;
-    }
-    return interval(TIME_ACCURACY).pipe(takeUntil(isPaused$));
-  }),
-  tap(() => setCurrentTime((c) => c - TIME_ACCURACY))
-);
+export const createCounter$ = (pauseStream$: Observable<boolean>) =>
+  pauseStream$.pipe(
+    switchMap((p) => {
+      if (p) {
+        return EMPTY;
+      }
+      return interval(TIME_ACCURACY).pipe(
+        takeUntil(pauseStream$.pipe(filter((v) => !!v)))
+      );
+    }),
+    tap(() => setCurrentTime((c) => c - TIME_ACCURACY))
+  );
 
 // keep the time above zero, and pause when reached
 export const belowZero$ = currentTime$.pipe(
