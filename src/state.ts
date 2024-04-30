@@ -91,3 +91,6 @@ export const normalizeTime$ = combineLatest([currentTime$, maxTime$]).pipe(
   filter(([ct, mt]) => ct > mt + 0.5),
   tap(([, mt]) => setCurrentTime(mt))
 );
+
+// reset the timer if any change is made to the timer
+export const smartReset$ = maxTime$.pipe(tap((v) => setCurrentTime(v)));

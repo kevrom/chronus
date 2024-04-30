@@ -19,10 +19,7 @@ const [isPaused, setPause] = pauseState;
 const [knob] = knobState;
 
 export const Timer = () => {
-  const handleIncClick = () => {
-    setMaxTime((c) => c + 60 * 1000);
-    setCurrentTime((c) => c + 60 * 1000);
-  };
+  const handleIncClick = () => setMaxTime((c) => c + 60 * 1000);
   const handlePlayPause = () => setPause((c) => !c);
   const handleReset = () => setCurrentTime(maxTime);
 
