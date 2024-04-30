@@ -33,11 +33,10 @@ const [, setKnob] = knobState;
 
 // STATE STREAMS
 
-const pause$ = from(observable(isPaused));
-const isPaused$ = pause$.pipe(filter((v) => !!v));
-const currentTime$ = from(observable(currentTime));
-const maxTime$ = from(observable(maxTime));
-const arc$ = from(observable(arc));
+export const pause$ = from(observable(isPaused));
+export const currentTime$ = from(observable(currentTime));
+export const maxTime$ = from(observable(maxTime));
+export const arc$ = from(observable(arc));
 
 // while unpaused, keep a timer running and listening for a pause
 export const counter$ = pause$.pipe(
@@ -45,7 +44,9 @@ export const counter$ = pause$.pipe(
     if (p) {
       return EMPTY;
     }
-    return interval(TIME_ACCURACY).pipe(takeUntil(isPaused$));
+    return interval(TIME_ACCURACY).pipe(
+      takeUntil(pause$.pipe(filter((v) => !!v)))
+    );
   }),
   tap(() => setCurrentTime((c) => c - TIME_ACCURACY))
 );
@@ -74,4 +75,10 @@ export const dialCoords$ = arc$.pipe(
       y + DIAL_RADIUS + CANVAS_MARGIN + LINE_WIDTH / 2,
     ])
   )
+);
+
+// if the currentTime ends up larger than the maxTime, fix it
+export const normalizeTime$ = combineLatest([currentTime$, maxTime$]).pipe(
+  filter(([ct, mt]) => ct > mt + 0.5),
+  tap(([, mt]) => setCurrentTime(mt))
 );
