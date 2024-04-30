@@ -16,6 +16,12 @@ $ pnpm dev
 
 Navigate to [http://localhost:3100](http://localhost:3100)
 
+Run tests
+
+```bash
+$ pnpm test
+```
+
 ## Todo (what could have been)
 
 - The knob animation around the dial is a little janky. A smoothing function could help.
@@ -27,3 +33,4 @@ Navigate to [http://localhost:3100](http://localhost:3100)
 - Convert into a PWA
 - Theming
 - Focus inputs when they appear on-sceen after clicking
+- Write RxJS marble diagram tests for the state streams
