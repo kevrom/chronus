@@ -22,6 +22,10 @@ Run tests
 $ pnpm test
 ```
 
+## Usage
+
+There are 2 ways to setup a timer. First is by clicking the +1:00 button. This will immediately add 1 minute to both the timer and the countdown. The second way is by clicking the digits of the timer and editing the input boxes.
+
 ## Todo (what could have been)
 
 - The knob animation around the dial is a little janky. A smoothing function could help.

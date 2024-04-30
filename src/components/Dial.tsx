@@ -1,4 +1,4 @@
-import { LINE_WIDTH, DIAL_RADIUS, CANVAS_MARGIN } from './constants';
+import { LINE_WIDTH, DIAL_RADIUS, CANVAS_MARGIN } from '../constants';
 
 export const Dial = () => (
   <div
