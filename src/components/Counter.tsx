@@ -21,7 +21,7 @@ export const Counter = () => {
       class="absolute text-3xl z-50 flex items-center"
       style={{ top: '160px' }}
     >
-      <span>
+      <span class="cursor-default">
         {ct().h}:{ct().m}:{ct().s}
       </span>
       <span>/</span>
@@ -47,6 +47,7 @@ export const Counter = () => {
       </Show>
       <Show when={editing() !== 'hours'}>
         <span
+          class="hover:text-sky-200 hover:border-2 border-2 border-transparent hover:border-sky-200 cursor-text"
           onClick={() => {
             setPause(true);
             setEditing('hours');
@@ -78,6 +79,7 @@ export const Counter = () => {
       </Show>
       <Show when={editing() !== 'minutes'}>
         <span
+          class="hover:text-sky-200 hover:border-2 border-2 border-transparent hover:border-sky-200 cursor-text"
           onClick={() => {
             setPause(true);
             setEditing('minutes');
@@ -109,6 +111,7 @@ export const Counter = () => {
       </Show>
       <Show when={editing() !== 'seconds'}>
         <span
+          class="hover:text-sky-200 hover:border-2 border-2 border-transparent hover:border-sky-200 cursor-text"
           onClick={() => {
             setPause(true);
             setEditing('seconds');
