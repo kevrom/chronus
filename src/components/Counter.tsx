@@ -1,12 +1,12 @@
-import { createSignal, onCleanup } from 'solid-js';
-import { maxTimeState, currentTimeState, pauseState } from './state';
-import { clickOutside } from './clickOutside';
-import { enterPress } from './enterPress';
-import { formatTime, parseTime, objToMs } from './utils';
+import { createSignal, Show } from 'solid-js';
+import { maxTimeState, currentTimeState, pauseState } from '../state';
+import { clickOutside } from '../utils/clickOutside';
+import { enterPress } from '../utils/enterPress';
+import { formatTime, parseTime, objToMs } from '../utils';
 
 const [maxTime, setMaxTime] = maxTimeState;
-const [currentTime, setCurrentTime] = currentTimeState;
-const [isPaused, setPause] = pauseState;
+const [currentTime] = currentTimeState;
+const [, setPause] = pauseState;
 
 const [editing, setEditing] = createSignal<
   'hours' | 'minutes' | 'seconds' | null
@@ -23,9 +23,9 @@ export const Counter = () => {
     >
       <span>
         {ct().h}:{ct().m}:{ct().s}
-      </span>{' '}
-      /{' '}
-      {editing() === 'hours' ? (
+      </span>
+      <span>/</span>
+      <Show when={editing() === 'hours'}>
         <input
           type="number"
           min={0}
@@ -41,14 +41,11 @@ export const Counter = () => {
               })
             )
           }
-          use:clickOutside={() => {
-            setEditing(null);
-          }}
-          use:enterPress={() => {
-            setEditing(null);
-          }}
+          use:clickOutside={() => setEditing(null)}
+          use:enterPress={() => setEditing(null)}
         />
-      ) : (
+      </Show>
+      <Show when={editing() !== 'hours'}>
         <span
           onClick={() => {
             setPause(true);
@@ -57,9 +54,9 @@ export const Counter = () => {
         >
           {mt().h}
         </span>
-      )}
-      :
-      {editing() === 'minutes' ? (
+      </Show>
+      <span>:</span>
+      <Show when={editing() === 'minutes'}>
         <input
           type="number"
           min={0}
@@ -75,14 +72,11 @@ export const Counter = () => {
               })
             )
           }
-          use:clickOutside={() => {
-            setEditing(null);
-          }}
-          use:enterPress={() => {
-            setEditing(null);
-          }}
+          use:clickOutside={() => setEditing(null)}
+          use:enterPress={() => setEditing(null)}
         />
-      ) : (
+      </Show>
+      <Show when={editing() !== 'minutes'}>
         <span
           onClick={() => {
             setPause(true);
@@ -91,9 +85,9 @@ export const Counter = () => {
         >
           {mt().m}
         </span>
-      )}
-      :
-      {editing() === 'seconds' ? (
+      </Show>
+      <span>:</span>
+      <Show when={editing() === 'seconds'}>
         <input
           type="number"
           min={0}
@@ -109,14 +103,11 @@ export const Counter = () => {
               })
             )
           }
-          use:clickOutside={() => {
-            setEditing(null);
-          }}
-          use:enterPress={() => {
-            setEditing(null);
-          }}
+          use:clickOutside={() => setEditing(null)}
+          use:enterPress={() => setEditing(null)}
         />
-      ) : (
+      </Show>
+      <Show when={editing() !== 'seconds'}>
         <span
           onClick={() => {
             setPause(true);
@@ -125,7 +116,7 @@ export const Counter = () => {
         >
           {mt().s}
         </span>
-      )}
+      </Show>
     </div>
   );
 };

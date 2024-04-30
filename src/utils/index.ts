@@ -3,7 +3,7 @@ import {
   CANVAS_SIZE,
   CANVAS_MARGIN,
   LINE_WIDTH,
-} from './constants';
+} from '../constants';
 
 export const parseTime = (ms: number) => {
   const seconds = Math.floor(ms / 1000);
