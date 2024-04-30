@@ -10,6 +10,6 @@ export const Canvas = (props: Props) => (
     ref={props.ref}
     width={CANVAS_SIZE}
     height={CANVAS_SIZE}
-    class="z-40 absolute"
+    class="z-20 absolute"
   />
 );

@@ -10,11 +10,11 @@ import {
   pauseState,
   currentTimeState,
   knobState,
-  createCounter$,
+  counter$,
   belowZero$,
   arcChange$,
   dialCoords$,
-  pause$,
+  normalizeTime$,
 } from './state';
 import { drawArc } from './utils';
 import { Canvas } from './Canvas';
@@ -32,10 +32,11 @@ export const Timer = () => {
     ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   });
 
-  const counter = createCounter$(pause$).subscribe();
+  const counter = counter$.subscribe();
   const belowZero = belowZero$.subscribe();
   const arcChange = arcChange$.subscribe((v) => drawArc(ctx, v));
   const dialCoords = dialCoords$.subscribe();
+  const normalizeTime = normalizeTime$.subscribe();
 
   const handleIncClick = () => {
     setMaxTime((c) => c + 60 * 1000);
@@ -47,6 +48,7 @@ export const Timer = () => {
     belowZero.unsubscribe();
     arcChange.unsubscribe();
     dialCoords.unsubscribe();
+    normalizeTime.unsubscribe();
   });
 
   return (
@@ -62,7 +64,7 @@ export const Timer = () => {
         <Knob coords={knob()} />
         <Canvas ref={canvas} />
         <Dial />
-        <Counter currentTime={currentTime()} maxTime={maxTime()} />
+        <Counter />
         <div class="flex flex-row items-center justify-between w-full text-2xl px-4 mt-8">
           <button onClick={handleIncClick}>+1:00</button>
           <button

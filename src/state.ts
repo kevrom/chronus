@@ -9,7 +9,6 @@ import {
   takeUntil,
   tap,
   combineLatest,
-  Observable,
 } from 'rxjs';
 import { degreesToPoint } from './utils';
 import {
@@ -40,18 +39,17 @@ export const maxTime$ = from(observable(maxTime));
 export const arc$ = from(observable(arc));
 
 // while unpaused, keep a timer running and listening for a pause
-export const createCounter$ = (pauseStream$: Observable<boolean>) =>
-  pauseStream$.pipe(
-    switchMap((p) => {
-      if (p) {
-        return EMPTY;
-      }
-      return interval(TIME_ACCURACY).pipe(
-        takeUntil(pauseStream$.pipe(filter((v) => !!v)))
-      );
-    }),
-    tap(() => setCurrentTime((c) => c - TIME_ACCURACY))
-  );
+export const counter$ = pause$.pipe(
+  switchMap((p) => {
+    if (p) {
+      return EMPTY;
+    }
+    return interval(TIME_ACCURACY).pipe(
+      takeUntil(pause$.pipe(filter((v) => !!v)))
+    );
+  }),
+  tap(() => setCurrentTime((c) => c - TIME_ACCURACY))
+);
 
 // keep the time above zero, and pause when reached
 export const belowZero$ = currentTime$.pipe(
@@ -77,4 +75,10 @@ export const dialCoords$ = arc$.pipe(
       y + DIAL_RADIUS + CANVAS_MARGIN + LINE_WIDTH / 2,
     ])
   )
+);
+
+// if the currentTime ends up larger than the maxTime, fix it
+export const normalizeTime$ = combineLatest([currentTime$, maxTime$]).pipe(
+  filter(([ct, mt]) => ct > mt + 0.5),
+  tap(([, mt]) => setCurrentTime(mt))
 );

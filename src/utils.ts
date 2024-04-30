@@ -5,15 +5,23 @@ import {
   LINE_WIDTH,
 } from './constants';
 
-export const formatTime = (ms: number) => {
+export const parseTime = (ms: number) => {
   const seconds = Math.floor(ms / 1000);
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds - h * 3600) / 60);
   const s = seconds - h * 3600 - m * 60;
+  return { h, m, s };
+};
+
+export const objToMs = (obj: ReturnType<typeof parseTime>) =>
+  (obj.h * 3600 + obj.m * 60 + obj.s) * 1000;
+
+export const formatTime = (ms: number) => {
+  const { h, m, s } = parseTime(ms);
   const hFormatted = h.toString().padStart(2, '0');
   const mFormatted = m.toString().padStart(2, '0');
   const sFormatted = s.toString().padStart(2, '0');
-  return `${hFormatted}:${mFormatted}:${sFormatted}`;
+  return { h: hFormatted, m: mFormatted, s: sFormatted };
 };
 
 export const degreesToRadians = (degrees: number) => (Math.PI / 180) * degrees;

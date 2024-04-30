@@ -4,6 +4,8 @@ import {
   degreesToRadians,
   degreesToPoint,
   formatTime,
+  parseTime,
+  objToMs,
 } from '../utils';
 import { CANVAS_SIZE, DIAL_RADIUS } from '../constants';
 
@@ -57,21 +59,35 @@ describe('degrees and coords', () => {
 });
 
 describe('time formatting', () => {
+  test('parses milliseconds into hours, minutes, and seconds', () => {
+    expect(parseTime(3661000)).toEqual({ h: 1, m: 1, s: 1 });
+    expect(parseTime(7200000)).toEqual({ h: 2, m: 0, s: 0 });
+    expect(parseTime(90000)).toEqual({ h: 0, m: 1, s: 30 });
+    expect(parseTime(0)).toEqual({ h: 0, m: 0, s: 0 });
+  });
+
+  test('converts hours, minutes, and seconds into milliseconds', () => {
+    expect(objToMs({ h: 1, m: 1, s: 1 })).toBe(3661000);
+    expect(objToMs({ h: 2, m: 0, s: 0 })).toBe(7200000);
+    expect(objToMs({ h: 0, m: 1, s: 30 })).toBe(90000);
+    expect(objToMs({ h: 0, m: 0, s: 0 })).toBe(0);
+  });
+
   test('formatTime() formats time correctly for less than an hour', () => {
     const ms = 1234567;
     const formattedTime = formatTime(ms);
-    expect(formattedTime).toBe('00:20:34');
+    expect(formattedTime).toStrictEqual({ h: '00', m: '20', s: '34' });
   });
 
   test('formatTime() formats time correctly for more than an hour', () => {
     const ms = 9876543;
     const formattedTime = formatTime(ms);
-    expect(formattedTime).toBe('02:44:36');
+    expect(formattedTime).toStrictEqual({ h: '02', m: '44', s: '36' });
   });
 
   test('formatTime() formats time correctly for exactly one hour', () => {
     const ms = 3600000;
     const formattedTime = formatTime(ms);
-    expect(formattedTime).toBe('01:00:00');
+    expect(formattedTime).toStrictEqual({ h: '01', m: '00', s: '00' });
   });
 });
