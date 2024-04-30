@@ -1,4 +1,4 @@
-import { Ref, onMount, onCleanup } from 'solid-js';
+import { onMount, onCleanup } from 'solid-js';
 import { CANVAS_SIZE } from '../constants';
 import {
   counter$,
@@ -6,6 +6,7 @@ import {
   arcChange$,
   dialCoords$,
   normalizeTime$,
+  smartReset$,
 } from '../state';
 import { drawArc } from '../utils';
 
@@ -22,6 +23,7 @@ export const Canvas = () => {
   const arcChange = arcChange$.subscribe((v) => drawArc(ctx, v));
   const dialCoords = dialCoords$.subscribe();
   const normalizeTime = normalizeTime$.subscribe();
+  const smartReset = smartReset$.subscribe();
 
   onCleanup(() => {
     counter.unsubscribe();
@@ -29,6 +31,7 @@ export const Canvas = () => {
     arcChange.unsubscribe();
     dialCoords.unsubscribe();
     normalizeTime.unsubscribe();
+    smartReset.unsubscribe();
   });
 
   return (
